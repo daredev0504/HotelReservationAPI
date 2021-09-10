@@ -20,5 +20,8 @@ namespace HotelReservationAPI.Services.Interfaces
         Task<IList<string>> GetUserRoles(ApplicationUser user);
         Task<bool> ChangeUserRole(ApplicationUser user, string oldRole, string newRole);
         void AddUserToRole(ApplicationUser user, string role);
+        Task<IEnumerable<AppUserReadDto>> GetCheckIns();
+        IEnumerable<AppUserReadDto> GetCheckOuts();
+        
     }
 }

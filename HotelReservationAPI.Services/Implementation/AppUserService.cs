@@ -11,12 +11,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using System.Linq;
+using HotelReservationAPI.Data.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HotelReservationAPI.Services.Implementation
 {
     public class AppUserService : IAppUserService
     {
+        private readonly IReservationRepository _reservationRepository;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthenticationManager _authenticationManager;
@@ -27,8 +29,9 @@ namespace HotelReservationAPI.Services.Implementation
         
 
 
-        public AppUserService(IServiceProvider serviceProvider,RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor, IEmailSender emailSender)
+        public AppUserService(IReservationRepository reservationRepository, IServiceProvider serviceProvider,RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor, IEmailSender emailSender)
         {
+            _reservationRepository = reservationRepository;
             _roleManager = roleManager;
             _userManager = userManager;
             _authenticationManager = serviceProvider.GetRequiredService<IAuthenticationManager>();
@@ -212,6 +215,28 @@ namespace HotelReservationAPI.Services.Implementation
         public void AddUserToRole(ApplicationUser user, string role)
         {
             _userManager.AddToRoleAsync(user, role);
+        }
+
+        public async Task<IEnumerable<AppUserReadDto>> GetCheckIns()
+        {
+            var loggedInUser = GetUserId();
+            var doYouHaveReservation = await _reservationRepository.GetYourReservations(loggedInUser);
+            if (doYouHaveReservation.Count > 0)
+            {
+                var users = _userManager.Users.Where(s => s.IsCheckedOut == false).ToList();
+                var usersDto = _mapper.Map<IEnumerable<AppUserReadDto>>(users);
+                return usersDto;
+            }
+
+            return null;
+        }
+
+
+        public IEnumerable<AppUserReadDto> GetCheckOuts()
+        {
+            var users = _userManager.Users.Where(s => s.IsCheckedOut == true).ToList();
+            var usersDto = _mapper.Map<IEnumerable<AppUserReadDto>>(users);
+            return usersDto;
         }
 
         public async Task<string> GenerateEmailConfirmationLink(ApplicationUser user)

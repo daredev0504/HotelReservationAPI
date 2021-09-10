@@ -123,7 +123,15 @@ namespace HotelReservationAPI.Services.Implementation
             await Pay(id);
 
             var result = await DeleteReservation(id);
-            if (result)
+            
+
+            var loggedInUser = _reservationRepository.GetUserId();
+            var user = await _appUserService.FindAppUserByEmail(loggedInUser);
+            user.IsCheckedOut = true;
+            var response = await _userManager.UpdateAsync(user);
+            
+
+            if (result && response.Succeeded)
             {
                 return true;
             }
@@ -166,11 +174,11 @@ namespace HotelReservationAPI.Services.Implementation
           
             var user = await _appUserService.FindAppUserByEmail(loggedInUser);
             var bookings = await GetYourReservations();
-            if (bookings != null)
+            if (bookings.Count > 0)
             {
                 user.IsCheckedOut = false;
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
+                var response = await _userManager.UpdateAsync(user);
+                if (response.Succeeded)
                 {
                     return true;
                 }

@@ -79,7 +79,36 @@ namespace HotelReservationAPI.Controllers
             return Ok(ResponseMessage.Message($"List of all occupied rooms {rooms.Count()}", null, rooms));
         }
 
-     
+        /// <summary>
+        /// Allows an admin to get all users currently checked in
+        /// </summary>
+        /// <returns>Admin Route</returns>
+        [Authorize(Roles = "Admin")]
+        [HttpGet("getCurrentCheckedInUsers")]
+        public async Task<IActionResult> GetCurrentCheckedInUsers()
+        {
+            var users = await _appUserService.GetCheckIns();
+            if (users != null)
+            {
+                return Ok(ResponseMessage.Message($"List of all users currently checked in {users.Count()}", null, users));
+            }
+
+            return NotFound("No one is currently checked in");
+        }
+
+        /// <summary>
+        /// Allows an admin to get all users currently checked out
+        /// </summary>
+        /// <returns>Admin Route</returns>
+        [Authorize(Roles = "Admin")]
+        [HttpGet("getCurrentCheckedOutUsers")]
+        public IActionResult GetCurrentCheckedOutUsers()
+        {
+            var users = _appUserService.GetCheckOuts();
+
+            return Ok(ResponseMessage.Message($"List of all users currently checked out {users.Count()}", null, users));
+        }
+
         /// <summary>
         /// get the rerservations of a Guest
         /// </summary>

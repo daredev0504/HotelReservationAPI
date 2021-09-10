@@ -33,6 +33,18 @@
             </summary>
             <returns>Admin Route</returns>
         </member>
+        <member name="M:HotelReservationAPI.Controllers.AdminController.GetCurrentCheckedInUsers">
+            <summary>
+            Allows an admin to get all users currently checked in
+            </summary>
+            <returns>Admin Route</returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AdminController.GetCurrentCheckedOutUsers">
+            <summary>
+            Allows an admin to get all users currently checked out
+            </summary>
+            <returns>Admin Route</returns>
+        </member>
         <member name="M:HotelReservationAPI.Controllers.AdminController.GetReservationsByUser(System.String)">
             <summary>
             get the rerservations of a Guest
