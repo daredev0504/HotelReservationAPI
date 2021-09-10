@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>C:\Users\hp\source\repos\HotelReservationAPI\HotelReservationAPI\HotelReservationAPI.xml</DocumentationFile>
+		<WarningLevel>0</WarningLevel>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.8" />
+   
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HotelReservationAPI.Data\HotelReservationAPI.Data.csproj" />
+    <ProjectReference Include="..\HotelReservationAPI.Helper\HotelReservationAPI.Helper.csproj" />
+    <ProjectReference Include="..\HotelReservationAPI.Models\HotelReservationAPI.Models.csproj" />
+    <ProjectReference Include="..\HotelReservationAPI.Services\HotelReservationAPI.Services.csproj" />
+  </ItemGroup>
+
+</Project>

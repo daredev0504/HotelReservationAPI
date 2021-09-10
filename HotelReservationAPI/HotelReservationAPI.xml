@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HotelReservationAPI</name>
+    </assembly>
+    <members>
+        <member name="T:HotelReservationAPI.Controllers.AdminController">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AdminController.GetAllUsers">
+            <summary>
+            Allows admins to get all User details
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AdminController.GetTotalRoomsNumber">
+            <summary>
+            get total rooms
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AdminController.GetAvailableRooms">
+            <summary>
+            Allows an admin to get all available rooms
+            </summary>
+            <returns>Admin Route</returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AdminController.GetOccupiedRooms">
+            <summary>
+            Allows an admin to get all occupied rooms
+            </summary>
+            <returns>Admin Route</returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AdminController.GetReservationsByUser(System.String)">
+            <summary>
+            get the rerservations of a Guest
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AuthController.SignUp(HotelReservationAPI.Models.DTOs.AppUser.AppUserRegisterDto)">
+            <summary>
+            Registers a new user automatically creating a main wallet for the user.
+            </summary>
+            <param name="appUserRegisterDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AuthController.Login(HotelReservationAPI.Models.DTOs.AppUser.AppUserLoginDto)">
+            <summary>
+             User with accounts can Log in
+            </summary>
+            <param name="appUserLogin"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AuthController.ConfirmEmail(System.String,System.String)">
+            <summary>
+            confirms your email
+            </summary>
+            <param name="token"></param>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AuthController.SuccessRegistration">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AuthController.GetUser(System.String)">
+            <summary>
+            Allows only logged-in admin to account details of any user
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AuthController.GetMyDetails">
+            <summary>
+            Allows any logged in user to get his/her account details
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.AuthController.CreateRole(System.String)">
+            <summary>
+            create a role
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.ReservationController.GetYourReservations">
+            <summary>
+            get all your reservations
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.ReservationController.CreateReservations(HotelReservationAPI.Models.DTOs.Reservation.ReservationBookDto)">
+            <summary>
+            create a reservation
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.RoomController.GetAll">
+            <summary>
+            get all rooms in the hotel
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.RoomController.GetById(System.String)">
+            <summary>
+            get a room by Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.RoomController.CreateRoom(HotelReservationAPI.Models.DTOs.Room.RoomReadDto)">
+            <summary>
+            create a room
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.RoomController.DeleteRoom(System.String)">
+            <summary>
+            delete a room
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HotelReservationAPI.Controllers.RoomController.UpdateRoom(System.String,HotelReservationAPI.Models.DTOs.Room.RoomUpdateDto)">
+            <summary>
+            update an existing room
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
