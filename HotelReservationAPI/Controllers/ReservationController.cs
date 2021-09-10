@@ -61,5 +61,41 @@ namespace HotelReservationAPI.Controllers
 
             return BadRequest("error booking your reservations");
         }
+
+        /// <summary>
+        /// check out 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("checkOut/{id}")]
+        public async Task<IActionResult> CheckOut(string id)
+        {
+            var response = await _reservationService.CheckOut(id);
+
+            if (response)
+            {
+                return Ok(ResponseMessage.Message("Checkout successful", null));
+            }
+
+            return BadRequest("error checking out");
+        }
+
+        /// <summary>
+        /// check out 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("checkIn")]
+        public async Task<IActionResult> CheckIn()
+        {
+            var response = await _reservationService.CheckIn();
+
+            if (response)
+            {
+                return Ok(ResponseMessage.Message("CheckIn successful", null));
+            }
+
+            return BadRequest("you do not have a reservation");
+        }
     }
 }

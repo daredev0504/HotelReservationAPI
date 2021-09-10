@@ -14,7 +14,9 @@ namespace HotelReservationAPI.Services.Interfaces
         Task<List<Reservation>> GetYourReservations();
         Task<Reservation> GetYourReservationById(string id);
         Task<List<Reservation>> GetReservationsDetails(string id);
-        Task<bool> CheckOut();
+        Task<bool> CheckOut(string id);
+        Task<bool> CheckIn();
+        Task<bool> Pay(string id);
         Task<bool> DeleteReservation(string id);
 
     }

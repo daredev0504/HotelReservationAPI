@@ -9,11 +9,13 @@ using HotelReservationAPI.Helper.MailService;
 using HotelReservationAPI.Models.DTOs.Reservation;
 using HotelReservationAPI.Models.Models;
 using HotelReservationAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace HotelReservationAPI.Services.Implementation
 {
     public class ReservationService : IReservationService
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IRoomRepository _roomRepository;
         private readonly IMapper _mapper;
         private readonly IAppUserService _appUserService;
@@ -21,8 +23,9 @@ namespace HotelReservationAPI.Services.Implementation
         private readonly IReservationRepository _reservationRepository;
         private readonly IEmailSender _emailSender;
 
-        public ReservationService(IRoomRepository roomRepository, IMapper mapper, IAppUserService appUserService, IRoomService roomService, IReservationRepository reservationRepository, IEmailSender emailSender)
+        public ReservationService(UserManager<ApplicationUser> userManager,IRoomRepository roomRepository, IMapper mapper, IAppUserService appUserService, IRoomService roomService, IReservationRepository reservationRepository, IEmailSender emailSender)
         {
+            _userManager = userManager;
             _roomRepository = roomRepository;
             _mapper = mapper;
             _appUserService = appUserService;
@@ -99,17 +102,15 @@ namespace HotelReservationAPI.Services.Implementation
             return totalMoney;
         }
 
-        public async Task<bool> CheckOut()
+        public async Task<bool> CheckOut(string id)
         {
             //unbook
             //delete reservation
-            var roomCurrentlyBooked = await GetYourReservations();
+            var roomCurrentlyBooked = await GetYourReservationById(id);
             var tempIds = new List<string>();
 
-            foreach (var reservation in roomCurrentlyBooked)
-            {
-                 tempIds.AddRange(reservation.Rooms);
-            }
+            tempIds.AddRange(roomCurrentlyBooked.Rooms);
+            
 
             foreach (var room in tempIds)
             {
@@ -118,7 +119,15 @@ namespace HotelReservationAPI.Services.Implementation
                 var roomD = _mapper.Map<Room>(roomDomain.Data);
                 await _roomRepository.UpdateRoom(roomDomain.Data.id, roomD);
             }
-            
+
+            await Pay(id);
+
+            var result = await DeleteReservation(id);
+            if (result)
+            {
+                return true;
+            }
+            return false;
         }
 
         public async Task<bool> DeleteReservation(string id)
@@ -128,6 +137,46 @@ namespace HotelReservationAPI.Services.Implementation
             return true;
         }
 
-       
+        public async Task<bool> Pay(string id)
+        {
+            var loggedInUser = _reservationRepository.GetUserId();
+            var reservation = await _reservationRepository.GetReservationById(loggedInUser, id); 
+            var user = await _appUserService.FindAppUserByEmail(loggedInUser);
+            if (user != null)
+            {
+                var message = new MailRequest()
+                {
+                    Body = $"Hi{user.FirstName} {user.LastName}, Your checkout was Successful" +
+                           $"you paid - {reservation.AmountToBePaid}",
+                    Subject = "Checkout Successful",
+                    ToEmail = user.Email
+                };
+
+                await _emailSender.SendEmailEasyAsync(message);
+                return true;
+            }
+
+            return false;
+
+        }
+
+        public async Task<bool> CheckIn()
+        {
+            var loggedInUser = _reservationRepository.GetUserId();
+          
+            var user = await _appUserService.FindAppUserByEmail(loggedInUser);
+            var bookings = await GetYourReservations();
+            if (bookings != null)
+            {
+                user.IsCheckedOut = false;
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
     }
 }
